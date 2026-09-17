@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="cloaker-key" content="7707d55d24998efe" />
+  <meta name="theme-color" content="#eaf2ff" />
+  <meta name="description" content="MrFeastProject Studio — Создаём миры, в которые хочется вернуться. Cosmic Battle — сражайся, прокачивай корабль и побеждай!" />
+  <title>MrFeastProject Studio — Cosmic Battle</title>
+  <style>
+    :root{
+      --ink:#11162b;--muted:#68708a;--blue:#5e9cff;--violet:#8b6cff;--cyan:#64e2e0;
+      --glass:rgba(255,255,255,.38);--line:rgba(255,255,255,.7);
+      --shadow:0 30px 80px rgba(71,82,145,.18),inset 0 1px 0 rgba(255,255,255,.9);
+      --gradient-brand:linear-gradient(100deg,#397fe9,#8a6af4 54%,#47bfca);
+      --gradient-warm:linear-gradient(100deg,#8b6cff,#e88a5e 60%,#e8b45e);
+      --gradient-icon:linear-gradient(145deg,#6a5aff,#a06bff 55%,#5ac8e8);
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+      --safe-left:env(safe-area-inset-left,0px);
+      --safe-right:env(safe-area-inset-right,0px);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{
+      margin:0;min-width:320px;color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      background:#edf3ff;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+      padding-left:var(--safe-left);padding-right:var(--safe-right);
+    }
+    img{max-width:100%;display:block}
+
+    /* ===== Ambient ===== */
+    .ambient{position:fixed;inset:0;z-index:-3;overflow:hidden;background:linear-gradient(125deg,#fafcff 0%,#e8f4ff 34%,#f0eaff 68%,#e9fbfb 100%);background-size:300% 300%;animation:sky 18s ease infinite}
+    .ambient::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.85) 1px,transparent 1px);background-size:28px 28px;opacity:.32;mask-image:linear-gradient(to bottom,#000,transparent 70%)}
+    .orb{position:absolute;border-radius:50%;filter:blur(10px);opacity:.68;will-change:transform}
+    .orb.a{width:46vw;height:46vw;left:-12vw;top:-12vw;background:radial-gradient(circle at 35% 35%,#fff 0 8%,#8ac5ff 35%,rgba(138,197,255,0) 72%);animation:driftA 16s ease-in-out infinite}
+    .orb.b{width:42vw;height:42vw;right:-9vw;top:20vh;background:radial-gradient(circle at 40% 40%,#fff,#ad93ff 38%,rgba(173,147,255,0) 72%);animation:driftB 20s ease-in-out infinite}
+    .orb.c{width:34vw;height:34vw;left:34vw;bottom:-18vw;background:radial-gradient(circle,#b2ffff,rgba(100,226,224,0) 68%);animation:driftA 22s ease-in-out infinite reverse}
+
+    /* ===== Navigation ===== */
+    .nav{
+      position:sticky;top:0;z-index:60;width:100%;
+      backdrop-filter:blur(24px) saturate(180%);
+      -webkit-backdrop-filter:blur(24px) saturate(180%);
+      background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.42));
+      border-bottom:1px solid rgba(255,255,255,.7);
+      box-shadow:0 4px 30px rgba(71,82,145,.08);
+      transition:box-shadow .3s,background .3s;
+      padding-top:var(--safe-top);
+    }
+    .nav.scrolled{box-shadow:0 8px 40px rgba(71,82,145,.14);background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.65))}
+    .nav-inner{
+      width:min(1180px,calc(100% - 40px));height:76px;margin:auto;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:760;letter-spacing:-.03em;text-decoration:none;color:var(--ink);transition:transform .3s;min-width:0;flex-shrink:1}
+    .brand:hover{transform:translateY(-1px)}
+    .brand-mark{
+      width:44px;height:44px;display:grid;place-items:center;border-radius:14px;
+      background:var(--gradient-icon);
+      box-shadow:0 10px 26px rgba(106,90,255,.35),inset 0 1px 3px rgba(255,255,255,.6);
+      position:relative;overflow:hidden;flex-shrink:0;
+      transition:transform .4s cubic-bezier(.2,.8,.2,1);
+    }
+    .brand-mark svg{width:24px;height:24px;color:#fff;position:relative;z-index:1}
+    .brand-mark::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.5),transparent 45%)}
+    .brand:hover .brand-mark{transform:rotate(-8deg) scale(1.05)}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;min-width:0;overflow:hidden}
+    .brand-text b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand-text small{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .status-pill{
+      display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;
+      background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);
+      box-shadow:inset 0 1px 0 #fff;color:#59617b;font-size:12.5px;font-weight:650;
+      backdrop-filter:blur(14px);white-space:nowrap;
+    }
+    .pulse{width:7px;height:7px;border-radius:50%;background:#57d6ad;box-shadow:0 0 0 5px rgba(87,214,173,.14);animation:pulse 2s infinite;flex-shrink:0}
+
+    /* Burger */
+    .nav-burger{
+      display:grid;width:46px;height:46px;border-radius:15px;
+      border:1px solid rgba(255,255,255,.9);
+      background:rgba(255,255,255,.6);cursor:pointer;place-items:center;
+      color:#4d566e;box-shadow:inset 0 1px 0 #fff,0 6px 18px rgba(71,82,145,.08);
+      transition:transform .3s,background .3s,box-shadow .3s;
+      position:relative;z-index:80;flex-shrink:0;
+    }
+    .nav-burger:hover{transform:translateY(-1px);background:rgba(255,255,255,.85)}
+    .nav-burger .lines{width:20px;height:14px;position:relative}
+    .nav-burger .lines span{
+      position:absolute;left:0;width:100%;height:2px;border-radius:2px;
+      background:linear-gradient(90deg,#6a5aff,#5ac8e8);
+      transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s,top .3s;
+    }
+    .nav-burger .lines span:nth-child(1){top:0}
+    .nav-burger .lines span:nth-child(2){top:6px}
+    .nav-burger .lines span:nth-child(3){top:12px}
+    .nav-burger.active .lines span:nth-child(1){top:6px;transform:rotate(45deg)}
+    .nav-burger.active .lines span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .nav-burger.active .lines span:nth-child(3){top:6px;transform:rotate(-45deg)}
+
+    /* ===== Side drawer ===== */
+    .drawer-backdrop{
+      position:fixed;inset:0;z-index:70;
+      background:rgba(60,68,110,.4);
+      backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+      opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;
+    }
+    .drawer-backdrop.open{opacity:1;visibility:visible}
+
+    .drawer{
+      position:fixed;top:0;right:0;bottom:0;z-index:75;
+      width:min(340px,88vw);
+      padding:calc(22px + var(--safe-top)) 22px calc(22px + var(--safe-bottom));
+      background:linear-gradient(160deg,rgba(250,252,255,.97),rgba(238,244,255,.94));
+      border-left:1px solid rgba(255,255,255,.9);
+      box-shadow:-30px 0 80px rgba(71,82,145,.28);
+      backdrop-filter:blur(30px) saturate(180%);
+      -webkit-backdrop-filter:blur(30px) saturate(180%);
+      transform:translateX(110%);
+      transition:transform .45s cubic-bezier(.2,.8,.2,1);
+      display:flex;flex-direction:column;
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px}
+    .drawer-head .brand{pointer-events:none;flex-shrink:1;min-width:0}
+    .drawer-close{
+      width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.9);
+      background:rgba(255,255,255,.6);cursor:pointer;display:grid;place-items:center;
+      color:#4d566e;font-size:15px;font-family:inherit;flex-shrink:0;
+      box-shadow:inset 0 1px 0 #fff;transition:.25s;
+    }
+    .drawer-close:hover{background:rgba(112,121,154,.15);transform:rotate(90deg)}
+    .drawer-label{font-size:11px;font-weight:750;letter-spacing:.16em;text-transform:uppercase;color:#8a91a5;padding:14px 12px 8px}
+    .drawer-nav{display:flex;flex-direction:column;gap:8px}
+    .drawer-link{
+      display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;
+      color:#3b4463;font-weight:650;font-size:15px;letter-spacing:-.015em;
+      background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);
+      text-decoration:none;cursor:pointer;font-family:inherit;text-align:left;width:100%;
+      box-shadow:0 4px 14px rgba(71,82,145,.05),inset 0 1px 0 #fff;
+      transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s,box-shadow .25s,color .25s;
+      position:relative;overflow:hidden;
+    }
+    .drawer-link::before{
+      content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+      background:var(--gradient-brand);transform:scaleY(0);transform-origin:top;
+      transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    }
+    .drawer-link .d-icon{
+      width:38px;height:38px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;
+      background:var(--gradient-icon);box-shadow:0 6px 16px rgba(106,90,255,.28),inset 0 1px 2px rgba(255,255,255,.4);
+      position:relative;overflow:hidden;
+    }
+    .drawer-link .d-icon::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.4),transparent 50%)}
+    .drawer-link .d-icon svg{width:18px;height:18px;color:#fff;position:relative;z-index:1}
+    .drawer-link .d-icon.tg{background:linear-gradient(145deg,#37aee2,#1e96c8 60%,#6dd5ed)}
+    .drawer-link:hover{background:rgba(255,255,255,.85);transform:translateX(4px);box-shadow:0 10px 24px rgba(71,82,145,.12),inset 0 1px 0 #fff}
+    .drawer-link:hover::before{transform:scaleY(1)}
+    .drawer-link.active{background:linear-gradient(100deg,rgba(91,157,255,.16),rgba(126,104,246,.14));color:#2b3a6b}
+    .drawer-link.active::before{transform:scaleY(1)}
+
+    .drawer-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(108,119,164,.18),transparent);margin:14px 0}
+    .drawer-status{
+      display:flex;align-items:center;gap:9px;padding:12px 16px;border-radius:16px;
+      background:rgba(87,214,173,.1);border:1px solid rgba(87,214,173,.28);
+      color:#3a8a6b;font-size:12.5px;font-weight:650;
+    }
+    .drawer-footer{margin-top:auto;padding-top:20px;color:#8a91a5;font-size:11.5px;text-align:center;line-height:1.6}
+
+    /* ===== Hero ===== */
+    main{position:relative}
+    .hero{
+      width:min(1180px,calc(100% - 40px));margin:auto;
+      padding:70px 0 40px;display:flex;justify-content:center;text-align:center;
+      scroll-margin-top:100px;
+    }
+    .hero-copy{display:flex;flex-direction:column;align-items:center;max-width:900px;width:100%}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:9px;padding:9px 15px;
+      border:1px solid rgba(255,255,255,.8);border-radius:999px;
+      background:rgba(255,255,255,.5);box-shadow:inset 0 1px 0 #fff;
+      color:#656d87;font-size:13px;font-weight:700;letter-spacing:.02em;backdrop-filter:blur(16px);
+    }
+    .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:#57d6ad;box-shadow:0 0 0 4px rgba(87,214,173,.16);animation:pulse 2s infinite;flex-shrink:0}
+    .hero h1{font-size:clamp(36px,6.2vw,78px);line-height:.98;letter-spacing:-.06em;margin:26px 0 22px;max-width:900px;font-weight:800}
+    .hero h1 .line-1{display:block;color:#2a3352}
+    .hero h1 .line-2{display:block;background:var(--gradient-warm);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+    .lead{max-width:640px;margin:0;color:var(--muted);font-size:clamp(16px,1.6vw,20px);line-height:1.6;letter-spacing:-.012em}
+    .actions{display:flex;align-items:center;gap:16px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+
+    /* ===== Buttons ===== */
+    .cta{
+      position:relative;isolation:isolate;border:1px solid rgba(255,255,255,.95);
+      border-radius:22px;padding:16px 28px;color:white;font-weight:750;
+      letter-spacing:-.02em;font-size:16px;cursor:pointer;
+      background:linear-gradient(120deg,rgba(91,157,255,.92),rgba(126,104,246,.9));
+      box-shadow:0 16px 38px rgba(78,125,234,.3),inset 0 1px 1px rgba(255,255,255,.72);
+      transition:transform .3s cubic-bezier(.2,.8,.2,1),filter .3s,box-shadow .3s;
+      overflow:hidden;display:inline-flex;align-items:center;gap:9px;font-family:inherit;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .cta::after{content:"";position:absolute;z-index:-1;inset:1px;border-radius:20px;background:linear-gradient(110deg,rgba(255,255,255,.35),transparent 45%)}
+    .cta:hover{transform:translateY(-2px) scale(1.03);filter:brightness(1.12);box-shadow:0 24px 55px rgba(78,125,234,.42),0 0 35px rgba(116,192,255,.4),inset 0 1px 1px white}
+    .cta:active{transform:scale(.97)}
+    .cta.ghost{background:rgba(255,255,255,.55);color:#4b5a9e;border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(71,82,145,.08)}
+    .cta.ghost:hover{background:rgba(255,255,255,.85);filter:none;box-shadow:0 12px 28px rgba(71,82,145,.14),inset 0 1px 0 #fff}
+    .cta .arrow{transition:transform .3s}
+    .cta:hover .arrow{transform:translateX(4px)}
+
+    /* ===== Sections ===== */
+    .section{width:min(1100px,calc(100% - 40px));margin:auto;padding:30px 0 90px;scroll-margin-top:100px}
+    .section-head{text-align:center;max-width:760px;margin:0 auto 46px}
+    .kicker{color:#6875e9;font-size:13px;font-weight:750;text-transform:uppercase;letter-spacing:.14em}
+    .section h2{margin:12px 0 14px;font-size:clamp(30px,4.6vw,56px);line-height:1.02;letter-spacing:-.05em;font-weight:800}
+    .section-head p{margin:0;color:var(--muted);font-size:16.5px;line-height:1.6}
+
+    /* ===== Features ===== */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .glass{
+      position:relative;padding:30px;border-radius:30px;
+      background:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.8);
+      box-shadow:var(--shadow);backdrop-filter:blur(25px);overflow:hidden;
+      transition:transform .35s cubic-bezier(.2,.8,.2,1),background .35s,box-shadow .35s;
+    }
+    .glass::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.5),transparent 35%);pointer-events:none}
+    .glass:hover{transform:translateY(-7px);background:rgba(255,255,255,.55);box-shadow:0 40px 90px rgba(71,82,145,.22),inset 0 1px 0 white}
+    .feature-icon{
+      width:54px;height:54px;display:grid;place-items:center;border-radius:17px;
+      background:var(--gradient-icon);
+      box-shadow:0 12px 28px rgba(106,90,255,.28),inset 0 1px 3px rgba(255,255,255,.4);
+      position:relative;overflow:hidden;
+      transition:transform .4s cubic-bezier(.2,.8,.2,1);
+    }
+    .feature-icon::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.45),transparent 50%)}
+    .feature-icon svg{width:26px;height:26px;color:#fff;position:relative;z-index:1}
+    .glass:hover .feature-icon{transform:rotate(-6deg) scale(1.08)}
+    .glass h3{margin:24px 0 10px;font-size:20px;letter-spacing:-.03em}
+    .glass p{color:#727a91;line-height:1.62;margin:0;font-size:14.5px}
+
+    /* ===== App Card ===== */
+    .app-card{
+      display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:center;
+      padding:32px 36px;border-radius:36px;
+      background:linear-gradient(125deg,rgba(255,255,255,.62),rgba(255,255,255,.28));
+      border:1px solid rgba(255,255,255,.92);
+      box-shadow:0 35px 90px rgba(79,89,155,.18),inset 0 1px 0 white;
+      backdrop-filter:blur(30px);
+      transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s;
+    }
+    .app-card:hover{transform:translateY(-4px);box-shadow:0 45px 110px rgba(79,89,155,.24),inset 0 1px 0 white}
+    .app-card .app-icon{
+      width:88px;height:88px;border-radius:24px;object-fit:cover;
+      box-shadow:0 14px 34px rgba(71,82,145,.22);
+      border:1px solid rgba(255,255,255,.9);background:#fff;
+      transition:transform .4s cubic-bezier(.2,.8,.2,1);flex-shrink:0;
+    }
+    .app-card:hover .app-icon{transform:scale(1.06) rotate(-3deg)}
+    .app-meta{min-width:0}
+    .app-meta h3{margin:0 0 8px;font-size:24px;letter-spacing:-.035em;font-weight:800}
+    .app-meta p{margin:0;color:#68708a;font-size:14.5px;line-height:1.55;max-width:480px}
+    .app-tags{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+    .tag{
+      font-size:11.5px;font-weight:700;letter-spacing:.03em;
+      padding:6px 12px;border-radius:999px;color:#4b5a9e;
+      background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.9);
+      box-shadow:inset 0 1px 0 #fff;
+      display:inline-flex;align-items:center;gap:6px;
+    }
+    .tag svg{width:13px;height:13px;opacity:.8;flex-shrink:0}
+    .app-actions{display:flex;flex-direction:column;gap:10px;align-items:stretch;min-width:150px}
+    .app-actions .cta{width:100%;padding:14px 22px;font-size:15px;border-radius:18px;justify-content:center}
+
+    /* ===== Socials ===== */
+    .socials-section{width:min(1100px,calc(100% - 40px));margin:auto;padding:10px 0 60px;scroll-margin-top:100px}
+    .socials-card{
+      padding:40px 44px;border-radius:36px;
+      background:linear-gradient(125deg,rgba(255,255,255,.55),rgba(255,255,255,.22));
+      border:1px solid rgba(255,255,255,.9);
+      box-shadow:0 30px 80px rgba(79,89,155,.16),inset 0 1px 0 white;
+      backdrop-filter:blur(30px);text-align:center;
+    }
+    .socials-card h2{margin:12px 0 10px;font-size:clamp(28px,4vw,44px);letter-spacing:-.05em;font-weight:800}
+    .socials-card > p{color:var(--muted);font-size:16px;line-height:1.6;margin:0 0 30px}
+    .socials-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:720px;margin:0 auto}
+    .social-btn{
+      display:flex;align-items:center;gap:14px;padding:18px 22px;border-radius:22px;
+      background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.95);
+      box-shadow:0 12px 30px rgba(71,82,145,.1),inset 0 1px 0 #fff;
+      text-decoration:none;color:var(--ink);text-align:left;
+      transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,background .3s;
+    }
+    .social-btn:hover{transform:translateY(-3px);background:rgba(255,255,255,.85);box-shadow:0 20px 45px rgba(71,82,145,.18),inset 0 1px 0 #fff}
+    .social-btn .s-icon{
+      width:46px;height:46px;flex-shrink:0;display:grid;place-items:center;border-radius:14px;
+      background:var(--gradient-icon);
+      box-shadow:0 8px 20px rgba(106,90,255,.3),inset 0 1px 2px rgba(255,255,255,.4);
+      position:relative;overflow:hidden;
+    }
+    .social-btn .s-icon::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.4),transparent 50%)}
+    .social-btn .s-icon svg{width:22px;height:22px;color:#fff;position:relative;z-index:1}
+    .social-btn .s-icon.tg{background:linear-gradient(145deg,#37aee2,#1e96c8 60%,#6dd5ed)}
+    .social-btn .s-info{min-width:0}
+    .social-btn b{display:block;font-size:15px;letter-spacing:-.02em}
+    .social-btn small{color:var(--muted);font-size:12.5px;font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    /* ===== Footer ===== */
+    .footer{text-align:center;color:#8a91a5;font-size:13px;padding:30px 20px calc(40px + var(--safe-bottom));line-height:1.8}
+    .footer-top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;color:#59617b;font-weight:700;font-size:14px}
+    .footer-top svg{width:18px;height:18px}
+    .footer b{color:#59617b;font-weight:700}
+    .footer a{color:#6875e9;text-decoration:none;font-weight:650}
+    .footer a:hover{text-decoration:underline}
+    .footer-links{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
+    .footer-links svg{width:14px;height:14px;opacity:.6}
+
+    /* ===== Modal ===== */
+    .modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(70,78,118,.32);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;visibility:hidden;transition:.3s}
+    .modal.open{opacity:1;visibility:visible}
+    .modal-card{
+      width:min(480px,100%);padding:36px;border-radius:36px;
+      background:rgba(249,252,255,.88);border:1px solid rgba(255,255,255,.95);
+      box-shadow:0 35px 100px rgba(60,70,120,.35),inset 0 1px 0 white;
+      transform:translateY(24px) scale(.95);transition:.35s cubic-bezier(.2,.8,.2,1);
+      position:relative;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;
+    }
+    .modal.open .modal-card{transform:none}
+    .close{position:absolute;right:18px;top:18px;width:38px;height:38px;border:0;border-radius:50%;background:rgba(112,121,154,.1);color:#6c748a;cursor:pointer;font-size:15px;transition:.25s;display:grid;place-items:center;font-family:inherit;z-index:2}
+    .close:hover{background:rgba(112,121,154,.2);transform:rotate(90deg)}
+    .modal h3{font-size:28px;letter-spacing:-.04em;margin:4px 0 10px;font-weight:800}
+    .modal p{color:#71798f;line-height:1.6;margin:0 0 22px;font-size:15px}
+
+    .app-card-modal{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;text-align:left;margin-bottom:22px}
+    .app-card-modal .app-icon{width:78px;height:78px;border-radius:20px;object-fit:cover;box-shadow:0 12px 28px rgba(71,82,145,.2);border:1px solid rgba(255,255,255,.9);background:#fff;flex-shrink:0}
+    .app-card-modal h4{margin:0 0 6px;font-size:20px;letter-spacing:-.03em}
+    .app-card-modal p{margin:0;color:#727a91;font-size:14px;line-height:1.5}
+
+    .app-detail{text-align:left;margin-top:8px;padding-top:20px;border-top:1px solid rgba(108,119,164,.14)}
+    .app-detail .row{
+      display:flex;justify-content:space-between;align-items:center;gap:14px;
+      font-size:14px;color:#59617b;padding:11px 0;
+    }
+    .app-detail .row + .row{border-top:1px dashed rgba(108,119,164,.14)}
+    .app-detail .row .label{display:flex;align-items:center;gap:11px}
+    .app-detail .row .mini-icon{
+      width:32px;height:32px;flex-shrink:0;display:grid;place-items:center;border-radius:10px;
+      background:var(--gradient-icon);
+      box-shadow:0 6px 16px rgba(106,90,255,.28),inset 0 1px 2px rgba(255,255,255,.4);
+      position:relative;overflow:hidden;
+    }
+    .app-detail .row .mini-icon::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.4),transparent 50%)}
+    .app-detail .row .mini-icon svg{width:16px;height:16px;color:#fff;position:relative;z-index:1}
+    .app-detail .row span:last-child{font-weight:700;color:#2a3352;text-align:right}
+
+    /* ===== Thank you ===== */
+    .thank-you{text-align:center;padding:6px 0}
+    .thank-you .check{
+      width:88px;height:88px;margin:0 auto 24px;display:grid;place-items:center;border-radius:28px;color:white;
+      background:linear-gradient(140deg,#63dbbd,#64a9ef);
+      box-shadow:0 18px 45px rgba(78,185,177,.4),0 0 0 8px rgba(99,219,189,.12);
+      position:relative;animation:pop .6s cubic-bezier(.2,.8,.2,1);
+    }
+    .thank-you .check::before{
+      content:"";position:absolute;inset:-8px;border-radius:32px;
+      background:conic-gradient(from 0deg,rgba(99,219,189,.5),rgba(100,169,239,.5),rgba(99,219,189,.5));
+      z-index:-1;filter:blur(12px);opacity:.7;animation:spin 4s linear infinite;
+    }
+    .thank-you .check svg{width:44px;height:44px}
+    .thank-you h3{font-size:26px;letter-spacing:-.04em;margin:0 0 12px;font-weight:800}
+    .thank-you p{color:#71798f;line-height:1.6;margin:0 0 26px;font-size:15.5px}
+    .thank-you .cta{width:100%;justify-content:center}
+    .thank-you-timer{font-size:12.5px;color:#9aa1b5;margin-top:14px;letter-spacing:.02em}
+
+    /* ===== Reveal ===== */
+    .reveal{opacity:0;filter:blur(8px);transform:translateY(30px) scale(.985);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1),filter .8s}
+    .reveal.visible{opacity:1;filter:blur(0);transform:none}
+    .reveal.delay-1{transition-delay:.08s}
+    .reveal.delay-2{transition-delay:.16s}
+    .reveal.delay-3{transition-delay:.24s}
+
+    /* ===== Keyframes ===== */
+    @keyframes sky{50%{background-position:100% 100%}}
+    @keyframes driftA{50%{transform:translate(7vw,5vh) scale(1.08)}}
+    @keyframes driftB{50%{transform:translate(-8vw,-6vh) scale(.92)}}
+    @keyframes pulse{50%{box-shadow:0 0 0 8px rgba(87,214,173,0)}}
+    @keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ===== Responsive ===== */
+
+    /* Large tablets and small laptops */
+    @media(max-width:1024px){
+      .hero{padding:60px 0 30px}
+      .section{padding:20px 0 80px}
+      .socials-card{padding:36px 36px}
+    }
+
+    /* Tablets */
+    @media(max-width:900px){
+      .nav-inner{height:70px}
+      .app-card{grid-template-columns:auto 1fr;gap:20px;padding:28px}
+      .app-actions{grid-column:1 / -1;flex-direction:row;min-width:0}
+      .app-actions .cta{flex:1}
+      .features{grid-template-columns:1fr;gap:16px}
+      .socials-grid{grid-template-columns:1fr}
+      .section-head{margin-bottom:36px}
+    }
+
+    /* Small tablets / large phones */
+    @media(max-width:720px){
+      .status-pill{display:none}
+      .brand-text small{font-size:10.5px}
+    }
+
+    /* Phones */
+    @media(max-width:600px){
+      :root{
+        --gradient-icon:linear-gradient(145deg,#6a5aff,#a06bff 55%,#5ac8e8);
+      }
+      .nav-inner{width:calc(100% - 28px);height:64px;gap:12px}
+      .brand{gap:10px}
+      .brand-mark{width:38px;height:38px;border-radius:12px}
+      .brand-mark svg{width:20px;height:20px}
+      .brand-text b{font-size:14.5px}
+      .brand-text small{font-size:10px}
+      .nav-burger{width:42px;height:42px;border-radius:13px}
+      .nav-burger .lines{width:18px;height:13px}
+      .nav-burger .lines span:nth-child(2){top:5.5px}
+      .nav-burger .lines span:nth-child(3){top:11px}
+      .nav-burger.active .lines span:nth-child(1){top:5.5px}
+      .nav-burger.active .lines span:nth-child(3){top:5.5px}
+
+      .drawer{width:100vw;max-width:100vw;border-left:0;padding:calc(18px + var(--safe-top)) 20px calc(20px + var(--safe-bottom))}
+
+      .hero{width:calc(100% - 28px);padding:40px 0 24px}
+      .eyebrow{font-size:12px;padding:8px 13px}
+      .hero h1{margin:22px 0 18px}
+      .lead{font-size:15.5px;padding:0 4px}
+      .actions{flex-direction:column;width:100%;margin-top:28px}
+      .actions .cta{width:100%;justify-content:center;padding:15px 22px;font-size:15.5px}
+
+      .section,.socials-section{width:calc(100% - 28px)}
+      .section{padding:16px 0 68px}
+      .section-head{margin-bottom:32px}
+      .section-head p{font-size:15px}
+      .kicker{font-size:12px;letter-spacing:.12em}
+
+      .glass{padding:24px;border-radius:26px}
+      .glass h3{font-size:18.5px;margin:20px 0 8px}
+      .glass p{font-size:14px}
+      .feature-icon{width:48px;height:48px;border-radius:15px}
+      .feature-icon svg{width:23px;height:23px}
+
+      .app-card{grid-template-columns:1fr;text-align:center;padding:24px 20px;border-radius:30px;gap:18px}
+      .app-card .app-icon{width:80px;height:80px;margin:0 auto}
+      .app-meta p{margin:0 auto;font-size:14px}
+      .app-tags{justify-content:center}
+      .app-actions{flex-direction:column;width:100%}
+      .app-actions .cta{width:100%}
+
+      .socials-card{padding:30px 22px;border-radius:30px}
+      .socials-card h2{font-size:26px}
+      .socials-card > p{font-size:14.5px;margin-bottom:24px}
+      .social-btn{padding:15px 17px;gap:12px;border-radius:18px}
+      .social-btn .s-icon{width:42px;height:42px;border-radius:13px}
+      .social-btn .s-icon svg{width:20px;height:20px}
+      .social-btn b{font-size:14px}
+      .social-btn small{font-size:11.5px}
+
+      .footer{font-size:12px;padding:24px 16px calc(32px + var(--safe-bottom))}
+      .footer-top{font-size:13px}
+
+      .modal{padding:14px;align-items:flex-end}
+      .modal-card{padding:26px 20px;border-radius:28px;max-height:92vh;max-height:92dvh}
+      .modal h3{font-size:23px}
+      .app-card-modal{grid-template-columns:1fr;text-align:center;gap:14px}
+      .app-card-modal .app-icon{width:72px;height:72px;margin:0 auto}
+      .app-detail .row{font-size:13.5px;gap:10px}
+      .app-detail .row .mini-icon{width:28px;height:28px;border-radius:9px}
+      .app-detail .row .mini-icon svg{width:14px;height:14px}
+      .thank-you .check{width:76px;height:76px;border-radius:24px}
+      .thank-you .check svg{width:38px;height:38px}
+      .thank-you h3{font-size:23px}
+      .thank-you p{font-size:14.5px}
+    }
+
+    /* Very small phones */
+    @media(max-width:360px){
+      .brand-text b{font-size:13.5px}
+      .brand-text small{display:none}
+      .hero h1{letter-spacing:-.05em}
+      .section h2{letter-spacing:-.04em}
+      .glass{padding:20px}
+      .socials-card{padding:26px 18px}
+    }
+
+    /* Landscape phones — reduce vertical paddings */
+    @media(max-height:520px) and (orientation:landscape){
+      .hero{padding:30px 0 20px}
+      .section{padding:16px 0 50px}
+      .modal{padding:14px;align-items:center}
+    }
+
+    /* Accessibility */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+      .reveal{opacity:1;filter:none;transform:none}
+    }
+
+    /* Large screens — keep content centered and readable */
+    @media(min-width:1400px){
+      .hero,.section,.socials-section{width:min(1200px,calc(100% - 80px))}
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="#" class="brand" onclick="return false">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 L20 7 L20 17 L12 22 L4 17 L4 7 Z"/>
+            <path d="M12 8 L12 16 M8 12 L16 12"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <b>MrFeastProject Studio</b>
+          <small>MrFeastProject.studio.com</small>
+        </div>
+      </a>
+      <div class="nav-right">
+        <div class="status-pill"><span class="pulse"></span> Сервис активен</div>
+        <button class="nav-burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer">
+          <span class="lines"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== SIDE DRAWER ===== -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Меню навигации">
+    <div class="drawer-head">
+      <a href="#" class="brand" onclick="return false">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 L20 7 L20 17 L12 22 L4 17 L4 7 Z"/>
+            <path d="M12 8 L12 16 M8 12 L16 12"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <b>MrFeastProject</b>
+          <small>Studio</small>
+        </div>
+      </a>
+      <button class="drawer-close" id="drawerClose" aria-label="Закрыть меню">✕</button>
+    </div>
+
+    <div class="drawer-label">Навигация</div>
+    <div class="drawer-nav">
+      <button class="drawer-link" data-scroll="about" type="button">
+        <span class="d-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </span>
+        О нас
+      </button>
+      <button class="drawer-link" data-scroll="projects" type="button">
+        <span class="d-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </span>
+        Проекты
+      </button>
+      <button class="drawer-link js-open" type="button">
+        <span class="d-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </span>
+        Cosmic Battle
+      </button>
+      <button class="drawer-link" data-scroll="socials" type="button">
+        <span class="d-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        Соцсети и связи
+      </button>
+    </div>
+
+    <div class="drawer-divider"></div>
+    <div class="drawer-label">Контакты</div>
+    <div class="drawer-nav">
+      <a class="drawer-link" href="tg://resolve?domain=MrFeastProjectChannel" target="_blank" rel="noopener">
+        <span class="d-icon tg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.5 L2.5 12 L8 14 L10 20 L13 16 L18 19 L21.5 4.5 Z"/><path d="M8 14 L18 7"/></svg>
+        </span>
+        Telegram Канал
+      </a>
+      <a class="drawer-link" href="tg://resolve?domain=MrFeast_Official" target="_blank" rel="noopener">
+        <span class="d-icon tg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        Связь с владельцем
+      </a>
+    </div>
+
+    <div class="drawer-status"><span class="pulse"></span> Сервис активен</div>
+    <div class="drawer-footer">© MrFeastProject 2026<br>Все права защищены</div>
+  </aside>
+
+  <main>
+    <!-- ===== HERO / ABOUT ===== -->
+    <section class="hero" id="about">
+      <div class="hero-copy">
+        <div class="eyebrow reveal"><span class="dot"></span> Студия независимой разработки</div>
+        <h1 class="reveal delay-1">
+          <span class="line-1">Создаём миры,</span>
+          <span class="line-2">в которые хочется вернуться</span>
+        </h1>
+        <p class="lead reveal delay-2">Маленькая команда с большим сердцем. Каждый наш проект — это частичка души, вложенная в каждую строчку кода.</p>
+        <div class="actions reveal delay-3">
+          <button class="cta" type="button" data-scroll="projects">Смотреть проекты <span class="arrow">→</span></button>
+          <button class="cta ghost" type="button" data-scroll="about">О студии</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FEATURES / PROJECTS ===== -->
+    <section class="section" id="projects">
+      <div class="section-head reveal">
+        <div class="kicker">Наши проекты</div>
+        <h2>Делаем с душой</h2>
+        <p>Три принципа, на которых строятся все наши игры и приложения.</p>
+      </div>
+      <div class="features">
+        <div class="glass reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3>Высший уровень графики</h3>
+          <p>Мы понимаем, что самое главное в сайтах и играх — это графика. Именно из-за неё до 89% людей начинают любить проекты: они ими вдохновляются, и они им очень заходят.</p>
+        </div>
+        <div class="glass reveal delay-1">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <h3>Премиальная оптимизация</h3>
+          <p>Стабильная и плавная работа — ещё один главный показатель качественного и технологичного проекта. Мы создавали кучу проектов и знаем от базовых до скрытых и реально годных способов оптимизации, поэтому наши проекты работают плавно и стабильно.</p>
+        </div>
+        <div class="glass reveal delay-2">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3>Мал-да удал</h3>
+          <p>Хоть студия по факту состоит из одного человека (владельца), она всё равно считается крупной студией разработки софта, так как мы сделали очень много годных проектов и стремительно развиваемся.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== APP CARD ===== -->
+    <section class="section" style="padding-top:0">
+      <div class="app-card reveal">
+        <img class="app-icon" src="https://raw.githubusercontent.com/MrFeastProject/Battle/refs/heads/main/CosmicBattle.png" alt="Cosmic Battle" />
+        <div class="app-meta">
+          <h3>Cosmic Battle</h3>
+          <p>Сражайся, прокачивай свой космический корабль и побеждай врагов, достигая невиданных высот!</p>
+          <div class="app-tags">
+            <span class="tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              APK
+            </span>
+            <span class="tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              23.9 МБ
+            </span>
+            <span class="tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              MrFeastProject
+            </span>
+          </div>
+        </div>
+        <div class="app-actions">
+          <button class="cta js-open" type="button">Подробно <span class="arrow">→</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SOCIALS ===== -->
+    <section class="socials-section" id="socials">
+      <div class="socials-card reveal">
+        <div class="kicker">Мы на связи</div>
+        <h2>Наши соцсети и связи</h2>
+        <p>Присоединяйтесь к сообществу, следите за обновлениями и задавайте вопросы напрямую.</p>
+        <div class="socials-grid">
+          <a class="social-btn" href="tg://resolve?domain=MrFeastProjectChannel" target="_blank" rel="noopener">
+            <div class="s-icon tg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 4.5 L2.5 12 L8 14 L10 20 L13 16 L18 19 L21.5 4.5 Z"/>
+                <path d="M8 14 L18 7"/>
+              </svg>
+            </div>
+            <div class="s-info">
+              <b>Telegram Канал</b>
+              <small>Открыть — @MrFeastProjectChannel</small>
+            </div>
+          </a>
+          <a class="social-btn" href="tg://resolve?domain=MrFeast_Official" target="_blank" rel="noopener">
+            <div class="s-icon tg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <div class="s-info">
+              <b>Связь с владельцем</b>
+              <small>Telegram — @MrFeast_Official</small>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2 L20 7 L20 17 L12 22 L4 17 L4 7 Z"/>
+        <path d="M12 8 L12 16 M8 12 L16 12"/>
+      </svg>
+      MrFeastProject Studio
+    </div>
+    <b>MrFeastProject 2026</b> — Все права защищены.<br>
+    MrFeastProject Studio и логотипы являются собственностью студии.<br>
+    <span class="footer-links">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <a href="#" onclick="return false">Политика конфиденциальности</a>
+      <span>·</span>
+      <a href="#" onclick="return false">Условия использования</a>
+    </span>
+  </footer>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <button class="close" id="closeModal" type="button" aria-label="Закрыть">✕</button>
+
+      <div id="appContent">
+        <div class="app-card-modal">
+          <img class="app-icon" src="https://raw.githubusercontent.com/MrFeastProject/Battle/refs/heads/main/CosmicBattle.png" alt="Cosmic Battle" />
+          <div>
+            <h4 id="modalTitle">Cosmic Battle</h4>
+            <p>Сражайся, прокачивай свой космический корабль и побеждай врагов, достигая невиданных высот!</p>
+          </div>
+        </div>
+        <div class="app-detail">
+          <div class="row">
+            <span class="label">
+              <span class="mini-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </span>
+              Тип
+            </span>
+            <span>apk</span>
+          </div>
+          <div class="row">
+            <span class="label">
+              <span class="mini-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </span>
+              Вес
+            </span>
+            <span>23.9 МБ / 24 МБ</span>
+          </div>
+          <div class="row">
+            <span class="label">
+              <span class="mini-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              Разработчик
+            </span>
+            <span>MrFeastProject</span>
+          </div>
+        </div>
+        <button class="cta" id="downloadBtn" type="button" style="margin-top:20px;width:100%;justify-content:center">Скачать <span class="arrow">↓</span></button>
+      </div>
+
+      <div id="thankYouContent" style="display:none">
+        <div class="thank-you">
+          <div class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <h3>Спасибо за скачивание!</h3>
+          <p>Спасибо, что скачали нашу игру — приятной игры! 🚀<br>Файл уже начал загружаться.</p>
+          <button class="cta" id="closeThank" type="button">Закрыть</button>
+          <div class="thank-you-timer" id="thankTimer">Окно закроется через 5 сек…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Скрытый iframe для автоскачивания -->
+  <iframe id="downloadFrame" style="display:none" title="download"></iframe>
+
+  <script>
+    /* ============================================================
+       ЭЛЕМЕНТЫ
+    ============================================================ */
+    const modal = document.getElementById('modal');
+    const appContent = document.getElementById('appContent');
+    const thankYouContent = document.getElementById('thankYouContent');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const closeModalBtn = document.getElementById('closeModal');
+    const closeThankBtn = document.getElementById('closeThank');
+    const thankTimer = document.getElementById('thankTimer');
+    const downloadFrame = document.getElementById('downloadFrame');
+
+    const burger = document.getElementById('burger');
+    const drawer = document.getElementById('drawer');
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    const drawerClose = document.getElementById('drawerClose');
+    const nav = document.getElementById('mainNav');
+
+    let autoCloseTimer = null;
+    let tickTimer = null;
+
+    /* ============================================================
+       БОКОВОЕ МЕНЮ (DRAWER)
+    ============================================================ */
+    const openDrawer = () => {
+      drawer.classList.add('open');
+      drawerBackdrop.classList.add('open');
+      burger.classList.add('active');
+      burger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeDrawer = () => {
+      drawer.classList.remove('open');
+      drawerBackdrop.classList.remove('open');
+      burger.classList.remove('active');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    burger.addEventListener('click', () => {
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerBackdrop.addEventListener('click', closeDrawer);
+
+    /* ============================================================
+       МОДАЛЬНОЕ ОКНО
+    ============================================================ */
+    const openModal = () => {
+      clearAllTimers();
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      appContent.style.display = 'block';
+      thankYouContent.style.display = 'none';
+    };
+    const closeModal = () => {
+      clearAllTimers();
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+    const clearAllTimers = () => {
+      clearTimeout(autoCloseTimer);
+      clearInterval(tickTimer);
+    };
+
+    const showThankYou = () => {
+      appContent.style.display = 'none';
+      thankYouContent.style.display = 'block';
+      if (!modal.classList.contains('open')) {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      let secondsLeft = 5;
+      thankTimer.textContent = `Окно закроется через ${secondsLeft} сек…`;
+      clearAllTimers();
+      tickTimer = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          thankTimer.textContent = `Окно закроется через ${secondsLeft} сек…`;
+        }
+      }, 1000);
+      autoCloseTimer = setTimeout(() => {
+        if (modal.classList.contains('open') && thankYouContent.style.display !== 'none') {
+          closeModal();
+        }
+      }, 5000);
+    };
+
+    document.querySelectorAll('.js-open').forEach(b => b.addEventListener('click', () => {
+      closeDrawer();
+      openModal();
+    }));
+    closeModalBtn.addEventListener('click', closeModal);
+    closeThankBtn.addEventListener('click', closeModal);
+
+    /* Скачивание в фоне + окно благодарности */
+    downloadBtn.addEventListener('click', () => {
+      downloadFrame.src = 'https://github.com/MrFeastProject/Mini-Game/raw/refs/heads/main/CosmicBattle.apk';
+      setTimeout(showThankYou, 1200);
+    });
+
+    /* Клик вне карточки */
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    /* ============================================================
+       ПЛАВНЫЙ СКРОЛЛ + АКТИВНАЯ СЕКЦИЯ
+    ============================================================ */
+    const sectionIds = ['about', 'projects', 'socials'];
+
+    const smoothScrollTo = (id) => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      // Небольшой отступ сверху, чтобы sticky-навигация не перекрывала заголовок
+      const navHeight = nav.offsetHeight;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+      window.scrollTo({ top, behavior: 'smooth' });
+    };
+
+    // Кнопки data-scroll — включая "Смотреть проекты" и "О студии"
+    document.querySelectorAll('[data-scroll]').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.scroll;
+        closeDrawer();
+        setTimeout(() => smoothScrollTo(id), 100);
+      });
+    });
+
+    /* Активная секция — обновляем подсветку в drawer */
+    const drawerLinks = document.querySelectorAll('.drawer-link[data-scroll]');
+    const updateActiveSection = () => {
+      const navHeight = nav.offsetHeight;
+      const scrollPos = window.scrollY + navHeight + 60;
+      let current = sectionIds[0];
+      sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos) current = id;
+      });
+      drawerLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.scroll === current);
+      });
+    };
+
+    /* ============================================================
+       SCROLL EVENTS
+    ============================================================ */
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          nav.classList.toggle('scrolled', window.scrollY > 10);
+          updateActiveSection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    /* Escape закрывает всё */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modal.classList.contains('open')) closeModal();
+        else if (drawer.classList.contains('open')) closeDrawer();
+      }
+    });
+
+    /* Закрываем drawer при повороте/ресайзе, если экран стал широким — но у нас drawer всегда доступен,
+       так что просто пересчитываем активную секцию */
+    window.addEventListener('resize', updateActiveSection, { passive: true });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(updateActiveSection, 300);
+    });
+
+    /* ============================================================
+       АНИМАЦИЯ ПОЯВЛЕНИЯ
+    ============================================================ */
+    const io = new IntersectionObserver(entries => entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        io.unobserve(e.target);
+      }
+    }), { threshold: .14 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* Инициализация активной секции */
+    updateActiveSection();
+  </script>
+</body>
+</html>
