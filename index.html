@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="cloaker-key" content="7707d55d24998efe" />
   <meta name="theme-color" content="#eaf2ff" />
-  <meta name="description" content="MrFeastProject Studio — Создаём миры, в которые хочется вернуться. Cosmic Battle — сражайся, прокачивай корабль и побеждай!" />
+  <meta name="description" content="MrFeastProject Studio — Создаём миры, в которые хочется вернуться. Cosmic Battle и FeastProxy — наши проекты." />
   <title>MrFeastProject Studio</title>
   <style>
     :root{
@@ -29,6 +29,15 @@
       padding-left:var(--safe-left);padding-right:var(--safe-right);
     }
     img{max-width:100%;display:block}
+
+    /* ===== Telegram Mini App ===== */
+    body.tg-mini-app{
+      background:var(--tg-theme-bg-color, #edf3ff);
+      color:var(--tg-theme-text-color, var(--ink));
+    }
+    body.tg-mini-app .nav{padding-top:0}
+    body.tg-mini-app .nav-inner{height:64px}
+    body.tg-mini-app .hero{padding:44px 0 24px}
 
     /* ===== Ambient ===== */
     .ambient{position:fixed;inset:0;z-index:-3;overflow:hidden;background:linear-gradient(125deg,#fafcff 0%,#e8f4ff 34%,#f0eaff 68%,#e9fbfb 100%);background-size:300% 300%;animation:sky 18s ease infinite}
@@ -79,7 +88,6 @@
     }
     .pulse{width:7px;height:7px;border-radius:50%;background:#57d6ad;box-shadow:0 0 0 5px rgba(87,214,173,.14);animation:pulse 2s infinite;flex-shrink:0}
 
-    /* Burger */
     .nav-burger{
       display:grid;width:46px;height:46px;border-radius:15px;
       border:1px solid rgba(255,255,255,.9);
@@ -102,7 +110,7 @@
     .nav-burger.active .lines span:nth-child(2){opacity:0;transform:scaleX(0)}
     .nav-burger.active .lines span:nth-child(3){top:6px;transform:rotate(-45deg)}
 
-    /* ===== Side drawer ===== */
+    /* ===== Drawer ===== */
     .drawer-backdrop{
       position:fixed;inset:0;z-index:70;
       background:rgba(60,68,110,.4);
@@ -213,7 +221,7 @@
     .cta:hover .arrow{transform:translateX(4px)}
 
     /* ===== Sections ===== */
-    .section{width:min(1100px,calc(100% - 40px));margin:auto;padding:30px 0 90px;scroll-margin-top:100px}
+    .section{width:min(1100px,calc(100% - 40px));margin:auto;padding:30px 0 60px;scroll-margin-top:100px}
     .section-head{text-align:center;max-width:760px;margin:0 auto 46px}
     .kicker{color:#6875e9;font-size:13px;font-weight:750;text-transform:uppercase;letter-spacing:.14em}
     .section h2{margin:12px 0 14px;font-size:clamp(30px,4.6vw,56px);line-height:1.02;letter-spacing:-.05em;font-weight:800}
@@ -242,7 +250,8 @@
     .glass h3{margin:24px 0 10px;font-size:20px;letter-spacing:-.03em}
     .glass p{color:#727a91;line-height:1.62;margin:0;font-size:14.5px}
 
-    /* ===== App Card ===== */
+    /* ===== App Cards ===== */
+    .apps-list{display:flex;flex-direction:column;gap:20px}
     .app-card{
       display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:center;
       padding:32px 36px;border-radius:36px;
@@ -391,15 +400,11 @@
     @keyframes spin{to{transform:rotate(360deg)}}
 
     /* ===== Responsive ===== */
-
-    /* Large tablets and small laptops */
     @media(max-width:1024px){
       .hero{padding:60px 0 30px}
-      .section{padding:20px 0 80px}
+      .section{padding:20px 0 60px}
       .socials-card{padding:36px 36px}
     }
-
-    /* Tablets */
     @media(max-width:900px){
       .nav-inner{height:70px}
       .app-card{grid-template-columns:auto 1fr;gap:20px;padding:28px}
@@ -409,18 +414,11 @@
       .socials-grid{grid-template-columns:1fr}
       .section-head{margin-bottom:36px}
     }
-
-    /* Small tablets / large phones */
     @media(max-width:720px){
       .status-pill{display:none}
       .brand-text small{font-size:10.5px}
     }
-
-    /* Phones */
     @media(max-width:600px){
-      :root{
-        --gradient-icon:linear-gradient(145deg,#6a5aff,#a06bff 55%,#5ac8e8);
-      }
       .nav-inner{width:calc(100% - 28px);height:64px;gap:12px}
       .brand{gap:10px}
       .brand-mark{width:38px;height:38px;border-radius:12px}
@@ -433,35 +431,29 @@
       .nav-burger .lines span:nth-child(3){top:11px}
       .nav-burger.active .lines span:nth-child(1){top:5.5px}
       .nav-burger.active .lines span:nth-child(3){top:5.5px}
-
       .drawer{width:100vw;max-width:100vw;border-left:0;padding:calc(18px + var(--safe-top)) 20px calc(20px + var(--safe-bottom))}
-
       .hero{width:calc(100% - 28px);padding:40px 0 24px}
       .eyebrow{font-size:12px;padding:8px 13px}
       .hero h1{margin:22px 0 18px}
       .lead{font-size:15.5px;padding:0 4px}
       .actions{flex-direction:column;width:100%;margin-top:28px}
       .actions .cta{width:100%;justify-content:center;padding:15px 22px;font-size:15.5px}
-
       .section,.socials-section{width:calc(100% - 28px)}
-      .section{padding:16px 0 68px}
+      .section{padding:16px 0 50px}
       .section-head{margin-bottom:32px}
       .section-head p{font-size:15px}
       .kicker{font-size:12px;letter-spacing:.12em}
-
       .glass{padding:24px;border-radius:26px}
       .glass h3{font-size:18.5px;margin:20px 0 8px}
       .glass p{font-size:14px}
       .feature-icon{width:48px;height:48px;border-radius:15px}
       .feature-icon svg{width:23px;height:23px}
-
       .app-card{grid-template-columns:1fr;text-align:center;padding:24px 20px;border-radius:30px;gap:18px}
       .app-card .app-icon{width:80px;height:80px;margin:0 auto}
       .app-meta p{margin:0 auto;font-size:14px}
       .app-tags{justify-content:center}
       .app-actions{flex-direction:column;width:100%}
       .app-actions .cta{width:100%}
-
       .socials-card{padding:30px 22px;border-radius:30px}
       .socials-card h2{font-size:26px}
       .socials-card > p{font-size:14.5px;margin-bottom:24px}
@@ -470,10 +462,8 @@
       .social-btn .s-icon svg{width:20px;height:20px}
       .social-btn b{font-size:14px}
       .social-btn small{font-size:11.5px}
-
       .footer{font-size:12px;padding:24px 16px calc(32px + var(--safe-bottom))}
       .footer-top{font-size:13px}
-
       .modal{padding:14px;align-items:flex-end}
       .modal-card{padding:26px 20px;border-radius:28px;max-height:92vh;max-height:92dvh}
       .modal h3{font-size:23px}
@@ -487,8 +477,6 @@
       .thank-you h3{font-size:23px}
       .thank-you p{font-size:14.5px}
     }
-
-    /* Very small phones */
     @media(max-width:360px){
       .brand-text b{font-size:13.5px}
       .brand-text small{display:none}
@@ -497,25 +485,20 @@
       .glass{padding:20px}
       .socials-card{padding:26px 18px}
     }
-
-    /* Landscape phones — reduce vertical paddings */
     @media(max-height:520px) and (orientation:landscape){
       .hero{padding:30px 0 20px}
-      .section{padding:16px 0 50px}
+      .section{padding:16px 0 40px}
       .modal{padding:14px;align-items:center}
     }
-
-    /* Accessibility */
     @media(prefers-reduced-motion:reduce){
       *,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
       .reveal{opacity:1;filter:none;transform:none}
     }
-
-    /* Large screens — keep content centered and readable */
     @media(min-width:1400px){
       .hero,.section,.socials-section{width:min(1200px,calc(100% - 80px))}
     }
   </style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="ambient" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
@@ -577,11 +560,11 @@
         </span>
         Проекты
       </button>
-      <button class="drawer-link js-open" type="button">
+      <button class="drawer-link" data-scroll="apps" type="button">
         <span class="d-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </span>
-        Cosmic Battle
+        Приложения
       </button>
       <button class="drawer-link" data-scroll="socials" type="button">
         <span class="d-icon">
@@ -623,13 +606,13 @@
         </h1>
         <p class="lead reveal delay-2">Маленькая команда с большим сердцем. Каждый наш проект — это частичка души, вложенная в каждую строчку кода.</p>
         <div class="actions reveal delay-3">
-          <button class="cta" type="button" data-scroll="projects">Смотреть проекты <span class="arrow">→</span></button>
+          <button class="cta" type="button" data-scroll="apps">Смотреть проекты <span class="arrow">→</span></button>
           <button class="cta ghost" type="button" data-scroll="about">О студии</button>
         </div>
       </div>
     </section>
 
-    <!-- ===== FEATURES / PROJECTS ===== -->
+    <!-- ===== FEATURES ===== -->
     <section class="section" id="projects">
       <div class="section-head reveal">
         <div class="kicker">Наши проекты</div>
@@ -668,31 +651,67 @@
       </div>
     </section>
 
-    <!-- ===== APP CARD ===== -->
-    <section class="section" style="padding-top:0">
-      <div class="app-card reveal">
-        <img class="app-icon" src="https://raw.githubusercontent.com/MrFeastProject/Battle/refs/heads/main/CosmicBattle.png" alt="Cosmic Battle" />
-        <div class="app-meta">
-          <h3>Cosmic Battle</h3>
-          <p>Сражайся, прокачивай свой космический корабль и побеждай врагов, достигая невиданных высот!</p>
-          <div class="app-tags">
-            <span class="tag">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              APK
-            </span>
-            <span class="tag">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-              23.9 МБ
-            </span>
-            <span class="tag">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              MrFeastProject
-            </span>
+    <!-- ===== APPS ===== -->
+    <section class="section" id="apps" style="padding-top:0">
+      <div class="section-head reveal">
+        <div class="kicker">Приложения</div>
+        <h2>Скачивай и играй</h2>
+        <p>Свежие проекты студии — доступны прямо сейчас.</p>
+      </div>
+      <div class="apps-list">
+
+        <!-- FeastProxy -->
+        <div class="app-card reveal">
+          <img class="app-icon" src="https://github.com/MrFeastProject/FeastProxy---Your-save-proxy/blob/main/app/src/main/res/drawable/ic_feast_vpn_logo.jpg?raw=true" alt="FeastProxy" />
+          <div class="app-meta">
+            <h3>FeastProxy (VPN)</h3>
+            <p>Обход Телеграмма с помощью локального прокси и серверов от MrFeastProject.</p>
+            <div class="app-tags">
+              <span class="tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                APK
+              </span>
+              <span class="tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                24.1 МБ
+              </span>
+              <span class="tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                MrFeastProject
+              </span>
+            </div>
+          </div>
+          <div class="app-actions">
+            <button class="cta js-open" type="button" data-app="feastproxy">Подробно <span class="arrow">→</span></button>
           </div>
         </div>
-        <div class="app-actions">
-          <button class="cta js-open" type="button">Подробно <span class="arrow">→</span></button>
+
+        <!-- Cosmic Battle -->
+        <div class="app-card reveal">
+          <img class="app-icon" src="https://raw.githubusercontent.com/MrFeastProject/Battle/refs/heads/main/CosmicBattle.png" alt="Cosmic Battle" />
+          <div class="app-meta">
+            <h3>Cosmic Battle</h3>
+            <p>Сражайся, прокачивай свой космический корабль и побеждай врагов, достигая невиданных высот!</p>
+            <div class="app-tags">
+              <span class="tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                APK
+              </span>
+              <span class="tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                23.9 МБ
+              </span>
+              <span class="tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                MrFeastProject
+              </span>
+            </div>
+          </div>
+          <div class="app-actions">
+            <button class="cta js-open" type="button" data-app="cosmic">Подробно <span class="arrow">→</span></button>
+          </div>
         </div>
+
       </div>
     </section>
 
@@ -760,10 +779,10 @@
 
       <div id="appContent">
         <div class="app-card-modal">
-          <img class="app-icon" src="https://raw.githubusercontent.com/MrFeastProject/Battle/refs/heads/main/CosmicBattle.png" alt="Cosmic Battle" />
+          <img class="app-icon" id="modalIcon" src="" alt="" />
           <div>
-            <h4 id="modalTitle">Cosmic Battle</h4>
-            <p>Сражайся, прокачивай свой космический корабль и побеждай врагов, достигая невиданных высот!</p>
+            <h4 id="modalTitle"></h4>
+            <p id="modalDesc"></p>
           </div>
         </div>
         <div class="app-detail">
@@ -772,9 +791,9 @@
               <span class="mini-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               </span>
-              Тип
+              Формат
             </span>
-            <span>apk</span>
+            <span id="modalFormat">apk</span>
           </div>
           <div class="row">
             <span class="label">
@@ -783,7 +802,7 @@
               </span>
               Вес
             </span>
-            <span>23.9 МБ / 24 МБ</span>
+            <span id="modalSize">—</span>
           </div>
           <div class="row">
             <span class="label">
@@ -806,7 +825,7 @@
             </svg>
           </div>
           <h3>Спасибо за скачивание!</h3>
-          <p>Спасибо, что скачали нашу игру — приятной игры! 🚀<br>Файл уже начал загружаться.</p>
+          <p>Спасибо, что скачали наше приложение — приятного использования! 🚀<br>Файл уже начал загружаться.</p>
           <button class="cta" id="closeThank" type="button">Закрыть</button>
           <div class="thank-you-timer" id="thankTimer">Окно закроется через 5 сек…</div>
         </div>
@@ -819,6 +838,36 @@
 
   <script>
     /* ============================================================
+       TELEGRAM MINI APP
+    ============================================================ */
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      // Полноэкранный режим (доступен в новых версиях Telegram)
+      try { tg.requestFullscreen?.(); } catch(e){}
+      try { tg.lockOrientation?.('portrait'); } catch(e){}
+      // Подстраиваем тему
+      document.body.classList.add('tg-mini-app');
+      if (tg.setHeaderColor) {
+        try { tg.setHeaderColor('#eaf2ff'); } catch(e){}
+      }
+      if (tg.setBackgroundColor) {
+        try { tg.setBackgroundColor('#edf3ff'); } catch(e){}
+      }
+      if (tg.enableClosingConfirmation) {
+        try { tg.enableClosingConfirmation(); } catch(e){}
+      }
+      // Кнопка "Назад" в Telegram
+      if (tg.BackButton) {
+        tg.BackButton.onClick(() => {
+          if (modal.classList.contains('open')) closeModal();
+          else if (drawer.classList.contains('open')) closeDrawer();
+        });
+      }
+    }
+
+    /* ============================================================
        ЭЛЕМЕНТЫ
     ============================================================ */
     const modal = document.getElementById('modal');
@@ -830,6 +879,12 @@
     const thankTimer = document.getElementById('thankTimer');
     const downloadFrame = document.getElementById('downloadFrame');
 
+    const modalIcon = document.getElementById('modalIcon');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalFormat = document.getElementById('modalFormat');
+    const modalSize = document.getElementById('modalSize');
+
     const burger = document.getElementById('burger');
     const drawer = document.getElementById('drawer');
     const drawerBackdrop = document.getElementById('drawerBackdrop');
@@ -838,9 +893,30 @@
 
     let autoCloseTimer = null;
     let tickTimer = null;
+    let currentDownloadUrl = '';
+
+    /* Данные приложений */
+    const APPS = {
+      feastproxy: {
+        name: 'FeastProxy (VPN)',
+        desc: 'Обход Телеграмма с помощью локального прокси и серверов от MrFeastProject.',
+        icon: 'https://github.com/MrFeastProject/FeastProxy---Your-save-proxy/blob/main/app/src/main/res/drawable/ic_feast_vpn_logo.jpg?raw=true',
+        format: '.apk',
+        size: '24.1 MB',
+        url: 'https://github.com/MrFeastProject/FeastProxy---Your-save-proxy/raw/refs/heads/main/FeastProxy.apk'
+      },
+      cosmic: {
+        name: 'Cosmic Battle',
+        desc: 'Сражайся, прокачивай свой космический корабль и побеждай врагов, достигая невиданных высот!',
+        icon: 'https://raw.githubusercontent.com/MrFeastProject/Battle/refs/heads/main/CosmicBattle.png',
+        format: '.apk',
+        size: '23.9 МБ / 24 МБ',
+        url: 'https://github.com/MrFeastProject/Mini-Game/raw/refs/heads/main/CosmicBattle.apk'
+      }
+    };
 
     /* ============================================================
-       БОКОВОЕ МЕНЮ (DRAWER)
+       DRAWER
     ============================================================ */
     const openDrawer = () => {
       drawer.classList.add('open');
@@ -848,6 +924,7 @@
       burger.classList.add('active');
       burger.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      if (tg?.BackButton) tg.BackButton.show();
     };
     const closeDrawer = () => {
       drawer.classList.remove('open');
@@ -855,6 +932,7 @@
       burger.classList.remove('active');
       burger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      if (tg?.BackButton && !modal.classList.contains('open')) tg.BackButton.hide();
     };
 
     burger.addEventListener('click', () => {
@@ -864,19 +942,30 @@
     drawerBackdrop.addEventListener('click', closeDrawer);
 
     /* ============================================================
-       МОДАЛЬНОЕ ОКНО
+       MODAL
     ============================================================ */
-    const openModal = () => {
+    const openModal = (appKey) => {
+      const app = APPS[appKey];
+      if (!app) return;
       clearAllTimers();
+      modalIcon.src = app.icon;
+      modalIcon.alt = app.name;
+      modalTitle.textContent = app.name;
+      modalDesc.textContent = app.desc;
+      modalFormat.textContent = app.format;
+      modalSize.textContent = app.size;
+      currentDownloadUrl = app.url;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
       appContent.style.display = 'block';
       thankYouContent.style.display = 'none';
+      if (tg?.BackButton) tg.BackButton.show();
     };
     const closeModal = () => {
       clearAllTimers();
       modal.classList.remove('open');
       document.body.style.overflow = '';
+      if (tg?.BackButton && !drawer.classList.contains('open')) tg.BackButton.hide();
     };
     const clearAllTimers = () => {
       clearTimeout(autoCloseTimer);
@@ -889,6 +978,7 @@
       if (!modal.classList.contains('open')) {
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
+        if (tg?.BackButton) tg.BackButton.show();
       }
       let secondsLeft = 5;
       thankTimer.textContent = `Окно закроется через ${secondsLeft} сек…`;
@@ -907,19 +997,20 @@
     };
 
     document.querySelectorAll('.js-open').forEach(b => b.addEventListener('click', () => {
+      const appKey = b.dataset.app || 'cosmic';
       closeDrawer();
-      openModal();
+      openModal(appKey);
     }));
     closeModalBtn.addEventListener('click', closeModal);
     closeThankBtn.addEventListener('click', closeModal);
 
-    /* Скачивание в фоне + окно благодарности */
+    /* Скачивание */
     downloadBtn.addEventListener('click', () => {
-      downloadFrame.src = 'https://github.com/MrFeastProject/Mini-Game/raw/refs/heads/main/CosmicBattle.apk';
+      if (!currentDownloadUrl) return;
+      downloadFrame.src = currentDownloadUrl;
       setTimeout(showThankYou, 1200);
     });
 
-    /* Клик вне карточки */
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
     });
@@ -927,18 +1018,16 @@
     /* ============================================================
        ПЛАВНЫЙ СКРОЛЛ + АКТИВНАЯ СЕКЦИЯ
     ============================================================ */
-    const sectionIds = ['about', 'projects', 'socials'];
+    const sectionIds = ['about', 'projects', 'apps', 'socials'];
 
     const smoothScrollTo = (id) => {
       const target = document.getElementById(id);
       if (!target) return;
-      // Небольшой отступ сверху, чтобы sticky-навигация не перекрывала заголовок
       const navHeight = nav.offsetHeight;
       const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
       window.scrollTo({ top, behavior: 'smooth' });
     };
 
-    // Кнопки data-scroll — включая "Смотреть проекты" и "О студии"
     document.querySelectorAll('[data-scroll]').forEach(el => {
       el.addEventListener('click', () => {
         const id = el.dataset.scroll;
@@ -947,7 +1036,6 @@
       });
     });
 
-    /* Активная секция — обновляем подсветку в drawer */
     const drawerLinks = document.querySelectorAll('.drawer-link[data-scroll]');
     const updateActiveSection = () => {
       const navHeight = nav.offsetHeight;
@@ -977,7 +1065,6 @@
       }
     }, { passive: true });
 
-    /* Escape закрывает всё */
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (modal.classList.contains('open')) closeModal();
@@ -985,15 +1072,11 @@
       }
     });
 
-    /* Закрываем drawer при повороте/ресайзе, если экран стал широким — но у нас drawer всегда доступен,
-       так что просто пересчитываем активную секцию */
     window.addEventListener('resize', updateActiveSection, { passive: true });
-    window.addEventListener('orientationchange', () => {
-      setTimeout(updateActiveSection, 300);
-    });
+    window.addEventListener('orientationchange', () => setTimeout(updateActiveSection, 300));
 
     /* ============================================================
-       АНИМАЦИЯ ПОЯВЛЕНИЯ
+       REVEAL
     ============================================================ */
     const io = new IntersectionObserver(entries => entries.forEach((e, i) => {
       if (e.isIntersecting) {
@@ -1003,7 +1086,6 @@
     }), { threshold: .14 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    /* Инициализация активной секции */
     updateActiveSection();
   </script>
 </body>
